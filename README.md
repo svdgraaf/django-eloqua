@@ -1,7 +1,7 @@
 django-eloqua
 =============
 
-Eloqua implementation for Django
+Eloqua implementation for Django, WIP!
 
 Requirements
 ============
