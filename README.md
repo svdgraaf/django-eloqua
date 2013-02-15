@@ -1,4 +1,4 @@
-py-eloqua
-=========
+django-eloqua
+=============
 
-Python Eloqua implementation
+Eloqua implementation for Django
