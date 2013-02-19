@@ -49,6 +49,10 @@ class EloquaClient(EloquaBaseClient):
     def contacts(self):
         return EloquaContactsClient()
 
+    @property
+    def landingpages(self):
+        return EloquaLandingPagesClient()
+
 
 class EloquaEmailClient(EloquaBaseClient):
     # only get/search need the slash
@@ -75,21 +79,23 @@ class EloquaEmailClient(EloquaBaseClient):
         if body_plaintext:
             payload['body_plaintext'] = body_plaintext
 
-        if sender_email and sender_email:
+        if sender_email:
             payload['senderEmail'] = sender_email
+        if sender_name:
             payload['senderName'] = sender_name
 
-        if reply_to_email and reply_to_name:
+        if reply_to_email:
             payload['replyToEmail'] = reply_to_email
-            payload['replyToName'] = reply_to_name            
+        if reply_to_name:
+            payload['replyToName'] = reply_to_name
 
         # make the call
         # TODO: logging?
         r = requests.post(self.base_url, data=json.dumps(payload), headers=self.headers)
-        if r.response_code == 200:
+        if r.status_code == 201:
             return r.json()
         else:
-            raise Exception('error!')  # TODO: be more verbose
+            raise Exception('error: %s' % r)  # TODO: be more verbose
 
 
 class EloquaContactsClient(EloquaBaseClient):
@@ -98,7 +104,7 @@ class EloquaContactsClient(EloquaBaseClient):
 
     def search(self, query, page=1, count=100, depth='complete'):
         """Search all contacts for given email query, eg:
-        
+
             from eloqua.lib import *
             e = EloquaClient()
             e.contacts.search('foobar@example.com')
@@ -119,4 +125,3 @@ class EloquaContactsClient(EloquaBaseClient):
 
         r = requests.get(url, params=payload, headers=self.headers)
         return r.json()
-

@@ -1,3 +1,4 @@
+=============
 django-eloqua
 =============
 
@@ -10,15 +11,18 @@ requests >= X
 
 Installation
 ============
+Installation is easiest done via pip::
 
-$ pip install django-eloqua
+    $ pip install django-eloqua
 
 Setup
 =====
 
-ELOQUA_SITE_ = 'ACME.Inc'
-ELOQUA_USERNAME = 'Foobar'
-ELOQUA_PASSWORD = 'f00b4r'
+Add this to your settings.py::
+
+    ELOQUA_SITE_ = 'ACME.Inc'
+    ELOQUA_USERNAME = 'my-api-user'
+    ELOQUA_PASSWORD = 'my-api-user-password'
 
 Todo
 ====
