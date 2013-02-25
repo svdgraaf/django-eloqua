@@ -3,7 +3,7 @@ from datetime import date
 from time import sleep
 from django.conf import settings
 import requests
-from eloqua.lib import EloquaClient
+from eloqua.clients import EloquaClient
 from optparse import make_option
 
 subjectOption = make_option('--subject',
