@@ -13,7 +13,7 @@ except:
 
 setup(
     name = 'django-eloqua',
-    version = '0.3.4',
+    version = '0.3.5',
     description='Python/Django interface for the Eloqua REST api.',
     long_description=README,
     author = 'Sander van de Graaf',
@@ -34,7 +34,7 @@ setup(
     ],
     install_requires=[
         "Django >= 1.3.0",
-        "request >= 1.1.0",
+        "requests >= 1.1.0",
 
     ],
 )
