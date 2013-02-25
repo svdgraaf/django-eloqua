@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 try:
-    README = open('README.md').read()
+    README = open('README.rst').read()
 except:
     README = None
 
@@ -13,7 +13,7 @@ except:
 
 setup(
     name = 'django-eloqua',
-    version = '0.3.3',
+    version = '0.3.4',
     description='Python/Django interface for the Eloqua REST api.',
     long_description=README,
     author = 'Sander van de Graaf',

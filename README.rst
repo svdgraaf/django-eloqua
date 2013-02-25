@@ -4,10 +4,6 @@ django-eloqua
 
 Eloqua implementation for Django, WIP!
 
-Requirements
-============
-Django >= 1.4
-Requests >= X
 
 Installation
 ============
