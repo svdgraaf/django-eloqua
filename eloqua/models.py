@@ -1,6 +1,7 @@
 from django.db import models
 from eloqua.exceptions import ContactFieldNotFound
 from eloqua import settings
+from datetime import datetime, timedelta
 import json
 
 try:
@@ -22,9 +23,11 @@ class Contact(models.Model):
     _contact_fields = {}
 
     def _fetch_profile(self):
-        # only fetch the profile data once, is this enough?
-        # perhaps depend on memcache, and store it there
-        if self._profile == None:
+        # check if we need to update the local data
+        timeout = settings.PROFILE_TIMEOUT
+        delta = timedelta(minutes=timeout)
+
+        if self.data == None or (datetime.now() - delta) > self.updated_at:
             from eloqua.clients import EloquaClient
             e = EloquaClient()
 
@@ -33,21 +36,27 @@ class Contact(models.Model):
             if self.contact_id == None:
                 results = e.contacts.search(self.user.email)
                 if len(results) > 0:
-                    self._profile = results['elements'][0]
+                    data = results['elements'][0]
             else:
                 results = e.contacts.get(self.contact_id)
-                self._profile = results
+                data = results
 
-            fields = {}
-            for field in self._profile['fieldValues']:
-                if 'value' in field:
-                    fields[int(field['id'])] = field['value']
-            self._contact_fields = fields
-
-        # check if eloqua id is present, if not, store it
-        if self.contact_id == None:
-            self.contact_id = self._profile['id']
+            # json-ify the data
+            self.data = json.dumps(data)
+            if 'contact_id' in data:
+                self.contact_id = data['content_id']
             self.save()
+
+        # load the json data
+        data = json.loads(self.data)
+        self._profile = data
+
+        # store all the contact fields seperately
+        fields = {}
+        for field in data['fieldValues']:
+            if 'value' in field:
+                fields[int(field['id'])] = field['value']
+        self._contact_fields = fields
 
         return self._profile
 
