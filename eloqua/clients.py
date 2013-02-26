@@ -63,7 +63,7 @@ class EloquaEmailClient(EloquaBaseClient):
     # only get/search need the slash
     base_url = settings.BASE_URL + '/assets/email'
 
-    def create(self, name, subject, body, body_plaintext=None, is_tracked=False, folder_id=None, sender_name=None, sender_email=None, reply_to_email=None, reply_to_name=None):
+    def create(self, name, subject, body, body_plaintext=None, group_id=None, is_tracked=False, folder_id=None, sender_name=None, sender_email=None, reply_to_email=None, reply_to_name=None):
         """Creates an email with the given parameters, returns a json representation"""
         payload = {
             'htmlContent': {
@@ -83,6 +83,9 @@ class EloquaEmailClient(EloquaBaseClient):
         # only add, if provided, otherwise, let the system generate one
         if body_plaintext:
             payload['body_plaintext'] = body_plaintext
+
+        if group_id:
+            payload['emailGroupId'] = group_id
 
         if sender_email:
             payload['senderEmail'] = sender_email

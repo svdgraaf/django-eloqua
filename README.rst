@@ -14,16 +14,21 @@ Installation is easiest done via pip::
 Setup
 =====
 
-Add this to your settings.py::
+Add `eloqua` to your INSTALLED_APPS section, and add this to your settings.py::
 
     ELOQUA_SITE_ = 'ACME.Inc'
     ELOQUA_USERNAME = 'my-api-user'
     ELOQUA_PASSWORD = 'my-api-user-password'
 
+If you are planning on using the model field, you should also run the migrations via South::
+
+    $ manage.py migrate eloqua
+
 And here are some optional settings::
 
     ELOQUA_PROFILE_TIMEOUT = 60 * 60 * 24  # the default amount of time, a profile data is cached in the database
     ELOQUA_BASE_URL = 'https://secure.eloqua.com/API/REST/1.0'  # you might want to override the default base url (eg: local reverse proxy, etc)
+
 
 Usage
 =====

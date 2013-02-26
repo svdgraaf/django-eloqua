@@ -36,10 +36,16 @@ fromEmailOption = make_option('--from-email',
     default=None,
     help='Sets the reply-to email for the mail')
 
+groupOption = make_option('--group',
+    action='store',
+    dest='group',
+    default=None,
+    help='Sets the group id for this mail')
+
 
 class Command(BaseCommand):
     help = 'Create mail in Eloqua, based of a url (eg: newsletters)'
-    option_list = BaseCommand.option_list + (subjectOption, nameOption, urlOption, fromEmailOption, fromNameOption)
+    option_list = BaseCommand.option_list + (subjectOption, nameOption, urlOption, fromEmailOption, fromNameOption, groupOption)
 
     def handle(self, *args, **options):
         if 'url' not in options:
@@ -63,4 +69,6 @@ class Command(BaseCommand):
         if options['name'] is None:
             options['name'] = options['subject']
 
-        print e.emails.create(options['name'], options['subject'], body, reply_to_name=options['from_name'], reply_to_email=options['from_email'])
+        import pprint
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pprint(e.emails.create(options['name'], options['subject'], body, group_id=options['group'], sender_email=options['from_email'], sender_name=options['from_name']))
