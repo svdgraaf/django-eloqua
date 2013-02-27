@@ -42,10 +42,16 @@ groupOption = make_option('--group',
     default=None,
     help='Sets the group id for this mail')
 
+trackOption = make_option('--track',
+    action='store',
+    dest='track',
+    default=True,
+    help='enables or disables tracking features (default: enable)')
+
 
 class Command(BaseCommand):
     help = 'Create mail in Eloqua, based of a url (eg: newsletters)'
-    option_list = BaseCommand.option_list + (subjectOption, nameOption, urlOption, fromEmailOption, fromNameOption, groupOption)
+    option_list = BaseCommand.option_list + (subjectOption, nameOption, urlOption, fromEmailOption, fromNameOption, groupOption, trackOption)
 
     def handle(self, *args, **options):
         if 'url' not in options:
@@ -71,4 +77,4 @@ class Command(BaseCommand):
 
         import pprint
         pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(e.emails.create(options['name'], options['subject'], body, group_id=options['group'], sender_email=options['from_email'], sender_name=options['from_name']))
+        pp.pprint(e.emails.create(options['name'], options['subject'], body, group_id=options['group'], sender_email=options['from_email'], sender_name=options['from_name'], is_tracked=options['track']))
