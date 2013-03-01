@@ -1,5 +1,5 @@
 from django.db import models
-from eloqua.exceptions import ContactFieldNotFound
+from eloqua.exceptions import ObjectNotFound
 from eloqua import settings
 from datetime import datetime, timedelta
 import json
@@ -76,7 +76,7 @@ class Contact(models.Model):
         if pk in self._contact_fields:
             return self._contact_fields[pk]
         else:
-            raise ContactFieldNotFound(pk)
+            raise ObjectNotFound(pk)
 
 # there must be a better way to do this, monkeypatching is ugly
 user_model.eloqua_profile = property(lambda u: Contact.objects.get_or_create(user=u)[0])

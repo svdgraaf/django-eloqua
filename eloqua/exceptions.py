@@ -1,10 +1,4 @@
-class ContactNotFound(Exception):
-    def __init__(self, msg="Contact with this email address could not be found"):
-        msg = msg
-        super(ContactNotFound, self).__init__(msg)
-
-
-class ContactFieldNotFound(Exception):
+class ObjectNotFound(Exception):
     def __init__(self, key=None):
-        msg = "A contact field for the given key (%s) could not be found" % key
-        super(ContactFieldNotFound, self).__init__(msg)
+        msg = "Object could not be found by the given key: %s" % (key)
+        super(ObjectNotFound, self).__init__(msg)

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block 'content' %}
+{{landing_page.htmlContent.systemHeader|safe}}
+<div id="landing_page-{{landing_page.id}}">
+    {{landing_page.htmlContent.htmlBody|safe}}
+</div>
+<div style="clear:both;"></div>
+<style>
+.main {
+    overflow-y: auto;
+    position: inherit;
+}
+
+.main > .sc-view {
+    position: inherit;
+}
+
+.sc-container-view {
+    left: inherit !important;
+    width: inherit !important;
+    margin-left: inherit !important;
+    top: inherit !important;
+    height: inherit !important;
+    margin-top: inherit !important;
+    position: inherit !important;
+}
+</style>
+{% endblock %}

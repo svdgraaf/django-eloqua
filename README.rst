@@ -24,6 +24,13 @@ If you are planning on using the model field, you should also run the migrations
 
     $ manage.py migrate eloqua
 
+If you want to use the landingpages integration, add the urls, eg::
+
+    # in urls.py
+    url(r'^eloqua/', include('eloqua.urls')),
+
+You can than reach your landingpages via: /eloqua/[id], or with slug: /eloqua/[id]-[slug], the slug is optional, as there currently is no way of fetching a landingpage by the slug :(
+
 And here are some optional settings::
 
     ELOQUA_PROFILE_TIMEOUT = 60 * 60 * 24  # the default amount of time, a profile data is cached in the database

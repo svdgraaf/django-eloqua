@@ -1,5 +1,5 @@
 from eloqua import settings
-from eloqua.exceptions import ContactNotFound, ContactFieldNotFound
+from eloqua.exceptions import ObjectNotFound
 import requests
 import base64
 import json
@@ -12,17 +12,20 @@ class EloquaBaseClient(object):
     def __init__(self):
         key = '{site}\\{username}:{password}'.format(site=settings.SITE, username=settings.USERNAME, password=settings.PASSWORD)
         authKey = base64.b64encode(key)
-        self.headers = {"Content-Type":"application/json", "Authorization":"Basic " + authKey}
+        self.headers = {"Content-Type": "application/json", "Authorization": "Basic " + authKey}
 
     def get(self, identifier):
         """Return the asset by the given id"""
         return self._get_by_id(identifier)
 
     def _get_by_id(self, identifier):
-        # primary url base seems out of whack
         url = self.base_url + '/' + str(identifier)
+        print url
         response = requests.get(url, headers=self.headers)
-        return response.json()
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise ObjectNotFound(identifier)
 
     # Delete asset by id, return True or False when succesful
     def _delete_by_id(self, identifier):
@@ -37,6 +40,18 @@ class EloquaBaseClient(object):
         """Deletes the asset by the given id"""
         return self._delete_by_id(identifier)
 
+    def search(self, query, page=1, count=100, depth='complete'):
+        url = self.base_url + 's'
+        payload = {
+            'search': query,
+            'page': page,
+            'count': count,
+            'depth': depth,
+        }
+
+        r = requests.get(url, params=payload, headers=self.headers)
+        return r.json()
+
 
 class EloquaClient(EloquaBaseClient):
     headers = ''
@@ -47,6 +62,10 @@ class EloquaClient(EloquaBaseClient):
         return EloquaEmailClient()
 
     @property
+    def email_groups(self):
+        return EloquaEmailGroupsClient()
+
+    @property
     def contacts(self):
         return EloquaContactsClient()
 
@@ -54,9 +73,9 @@ class EloquaClient(EloquaBaseClient):
     def contact_fields(self):
         return EloquaContactFieldsClient()
 
-    # @property
-    # def landingpages(self):
-    #     return EloquaLandingPagesClient()
+    @property
+    def landingpages(self):
+        return EloquaLandingPagesClient()
 
 
 class EloquaEmailClient(EloquaBaseClient):
@@ -135,7 +154,7 @@ class EloquaContactsClient(EloquaBaseClient):
         if r.status_code == 200:
             return r.json()
         else:
-            raise ContactNotFound()
+            raise ObjectNotFound(None)
 
 
 class EloquaContactFieldsClient(EloquaBaseClient):
@@ -152,3 +171,23 @@ class EloquaContactFieldsClient(EloquaBaseClient):
 
         r = requests.get(url, params=payload, headers=self.headers)
         return r.json()
+
+
+class EloquaEmailGroupsClient(EloquaBaseClient):
+    base_url = settings.BASE_URL + '/assets/email/group'
+
+    def search(self, query, page=1, count=100, depth='complete'):
+        url = self.base_url + 's'
+        payload = {
+            'search': query,
+            'page': page,
+            'count': count,
+            'depth': depth,
+        }
+
+        r = requests.get(url, params=payload, headers=self.headers)
+        return r.json()
+
+
+class EloquaLandingPagesClient(EloquaBaseClient):
+    base_url = settings.BASE_URL + '/assets/landingPage'

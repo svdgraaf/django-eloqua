@@ -13,7 +13,7 @@ except:
 
 setup(
     name = 'django-eloqua',
-    version = '0.3.6',
+    version = '0.4.0',
     description='Python/Django interface for the Eloqua REST api.',
     long_description=README,
     author = 'Sander van de Graaf',
