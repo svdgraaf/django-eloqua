@@ -13,7 +13,7 @@ except:
 
 setup(
     name = 'django-eloqua',
-    version = '0.4.0',
+    version = '0.4.1',
     description='Python/Django interface for the Eloqua REST api.',
     long_description=README,
     author = 'Sander van de Graaf',
@@ -21,6 +21,7 @@ setup(
     license = LICENSE,
     url = 'http://github.com/svdgraaf/django-eloqua/',
     packages = find_packages(),
+    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
